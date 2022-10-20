@@ -1,27 +1,36 @@
 import { Box, Textarea, Button, Flex, Text } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useRef, ReactElement, useEffect } from "react";
+import { useChat } from "./hooks";
 
 function App() {
-  const [msgs, setMsgs] = useState<string[]>([]);
   const [msg, setMsg] = useState<string>("");
+  const { messages, send } = useChat();
 
-  const handleKeyDownEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if ((e.code = "Enter")) handlePushMsg();
-  };
+  const container = useRef<HTMLDivElement | null>(null);
 
   const handlePushMsg = () => {
-    !!msg && setMsgs([...msgs, msg]);
+    !!msg && send(msg);
+    container.current && container.current.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
     setMsg("");
   };
 
+  useEffect(() => {
+    if (container.current) {
+    }
+  }, []);
+
   return (
-    <Box h="100vh">
-      <Box h="70vh" p="30px">
-        {msgs.map((text, index) => (
-          <Text key={text + "_" + index}>{text}</Text>
+    <Flex h="100vh" direction="column">
+      <Box h="70vh" p="30px" overflow="auto">
+        {messages.map((msg) => (
+          <Box key={msg.created_at}>
+            <Text color="#999">{msg.user?.name || "unkonw"}</Text>
+            <Text fontSize="3xl">{msg.text}</Text>
+          </Box>
         ))}
+        <Box ref={container}></Box>
       </Box>
-      <Flex h="30vh" padding="30" borderTop="1px solid #ccc">
+      <Flex flex="1" padding="30" borderTop="1px solid #ccc">
         <Textarea
           placeholder="input message"
           h="100%"
@@ -34,7 +43,7 @@ function App() {
           send
         </Button>
       </Flex>
-    </Box>
+    </Flex>
   );
 }
 
