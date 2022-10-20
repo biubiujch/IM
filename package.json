@@ -8,7 +8,8 @@
     "react-build": "tsc && vite build",
     "electron-start": "electron .",
     "electron-build": "electron-builder",
-    "dev": "concurrently \"cross-env BROWSER=none vite\"  \"wait-on http://localhost:8888 & pnpm run electron-start\""
+    "dev": "concurrently \"cross-env BROWSER=none vite\"  \"wait-on http://localhost:8888 & pnpm run electron-start\"",
+    "build": "pnpm run react-build && pnpm run electron-build"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.3.6",
@@ -32,11 +33,13 @@
     "vite": "^3.1.0",
     "wait-on": "^6.0.1"
   },
-  "asar": false,
-  "files": [
-    "package.json",
-    "main.js",
-    "build/",
-    "node_module/"
-  ]
+  "build": {
+    "asar": false,
+    "files": [
+      "package.json",
+      "main.js",
+      "build/",
+      "node_module/"
+    ]
+  }
 }
